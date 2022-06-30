@@ -18,14 +18,13 @@ class Student:
         res = f'Имя:{self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания:{Lecturer.average_grade(self)}\n'
         res = res + f'Курсы в процессе изучения: {self.courses_in_progress}\nЗавершенные курсы: {self.finished_courses}'
         return res
-    def compare_persons(self, person_1, person_2):
-        if (isinstance(person_1, Student) and isinstance(person_2, Student)) or (isinstance(person_1, Lecturer) and isinstance(person_2, Lecturer)):
-            if Lecturer.average_grade(person_1) > Lecturer.average_grade(person_2):
-                res = f'Средняя оценка первого участника ({Lecturer.average_grade(person_1)}) больше чем у второго ({Lecturer.average_grade(person_2)})'
-                return res
+
+    def __lt__(self, other):
+        if isinstance(other, Student):
+            if Lecturer.average_grade(self) > Lecturer.average_grade(other) == True:
+                return f'Средняя оценка первого студента ({Lecturer.average_grade(self)}) больше чем у второго ({Lecturer.average_grade(other)})'
             else:
-                res = f'Средняя оценка второго участника ({Lecturer.average_grade(person_2)}) больше чем у первого ({Lecturer.average_grade(person_1)})'
-                return res
+                return f'Средняя оценка второго студента({Lecturer.average_grade(other)}) больше чем у первого({Lecturer.average_grade(self)})'
         else:
             return 'Ошибка'
 
@@ -51,6 +50,14 @@ class Lecturer(Mentor):
     def __str__(self):
         res = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average_grade()}'
         return res
+    def __lt__(self, other):
+        if isinstance(other, Lecturer):
+            if Lecturer.average_grade(self) > Lecturer.average_grade(other) == True:
+                return f'Средняя оценка первого лектора ({Lecturer.average_grade(self)}) больше чем у второго ({Lecturer.average_grade(other)})'
+            else:
+                return f'Средняя оценка второго лектора({Lecturer.average_grade(other)}) больше чем у первого({Lecturer.average_grade(self)})'
+        else:
+            return 'Ошибка'
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):
@@ -111,8 +118,6 @@ second_student.rate_lecturer(second_lecturer, 'JavaScript', 7)
 second_student.rate_lecturer(second_lecturer, 'JavaScript', 6)
 print(second_lecturer.grades, '\n')
 
-print(first_student.compare_persons(first_lecturer, second_lecturer), '\n')
-
 print(first_lecturer.average_grade())
 print(second_lecturer.average_grade(), '\n')
 
@@ -122,8 +127,6 @@ print(first_student.grades)
 second_reviewer.rate_hw(second_student, 'JavaScript', 10)
 second_reviewer.rate_hw(second_student, 'JavaScript', 7)
 print(second_student.grades, '\n')
-
-print(first_student.compare_persons(first_student, second_student), '\n')
 
 print(Lecturer.average_grade(first_student))
 print(Lecturer.average_grade(second_student), '\n')
@@ -143,10 +146,11 @@ another_student_py. courses_in_progress += ['Python']
 first_reviewer.rate_hw(another_student_py, 'Python', 10)
 first_reviewer.rate_hw(another_student_py, 'Python', 6)
 
-print(students_average_grade([first_student, another_student_py], 'Python'))
+print(students_average_grade([first_student, another_student_py], 'Python'), '\n')
 
+print(first_student.__lt__(another_student_py), '\n')
 
-
+print(first_lecturer.__lt__(another_lecturer_py), '\n')
 
 
 
